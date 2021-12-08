@@ -1,5 +1,8 @@
-const tmi = require('tmi.js');
-require('dotenv').config();
+import tmi from 'tmi.js'
+import dotenv from 'dotenv';
+dotenv.config();
+
+import Dice from './Commands/Dice';
 
 const client = new tmi.Client({
     connection : {
@@ -24,5 +27,7 @@ client.on('message', (channel, tags, message, self) => {
 	if(self) return;
 	if(message.toLowerCase() === '!hello') {
 		client.say(channel, `@${tags['display-name']}, heya!`);
-	}
+	} else if(message.toLowerCase() === '!dice'){
+        client.say(channel, `@${tags['display-name']}, you rolled a ${Dice()}`)
+    }
 });
