@@ -2,7 +2,7 @@ import tmi from 'tmi.js'
 import dotenv from 'dotenv';
 dotenv.config();
 
-import Dice from './Commands/Dice';
+import Commands from './Commands/Commands';
 
 const client = new tmi.Client({
     connection : {
@@ -16,18 +16,38 @@ const client = new tmi.Client({
 	channels: [ process.env.CHANNEL_NAME ]
 });
 
-client.connect().catch(console.error);
 
+// Keep track of chat messages, awaiting commands
 client.on('message', (channel, tags, message, self) => {
-	// "Alca: Hello, World!"
-	console.log(`${tags['display-name']}: ${message}`);
-});
-
-client.on('message', (channel, tags, message, self) => {
-	if(self) return;
-	if(message.toLowerCase() === '!hello') {
-		client.say(channel, `@${tags['display-name']}, heya!`);
-	} else if(message.toLowerCase() === '!dice'){
-        client.say(channel, `@${tags['display-name']}, you rolled a ${Dice()}`)
+    const args = message.split(" ");
+    const command = args.shift();
+    
+    if(self) {return;}
+    
+    // chatParams is now the argument passed to all commands
+    // It contains all we need for arguments
+    // example: client.say() is now chatParams.client.say()
+    const chatParams = {
+        client: client,
+        channel: channel,
+        tags: tags,
+        message: message, 
+        self: self,
+        args: args
     }
+    
+    //  
+    // chatParams will be passed an argument to this, containing all the parameters we need. 
+    
+    if(Commands[command]){
+        Commands[command](chatParams);
+    }
+    
+    console.log(`${tags['display-name']}: ${message}`);
 });
+
+client.on('connected', () => {
+    console.log('Bot has connected...');
+});
+
+client.connect().catch(console.error);
