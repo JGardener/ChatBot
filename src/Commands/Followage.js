@@ -19,8 +19,6 @@ const Followage = (chatParams) => {
             let rightNow = DateTime.now();
             let difference = rightNow.diff(followStart, ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']).toObject();
             let differenceArray = [];
-            
-            console.log('Line 23:', Object.entries(difference));
 
             // Converts the diff object to a string.
             let differenceMessage = () => {
@@ -33,7 +31,7 @@ const Followage = (chatParams) => {
             }
             
             chatParams.client.say(chatParams.channel, 
-                `${chatParams.tags['display-name']} has followed Rom since ${followStart.toFormat('DDDD')}, ${differenceMessage()}`);
+                `${chatParams.tags['display-name']} has followed ${process.env.CHANNEL_NAME} since ${followStart.toFormat('DDDD')} -  ${differenceMessage()}`);
         });    
     }
     getUserFollowAge(chatParams.tags['user-id']);

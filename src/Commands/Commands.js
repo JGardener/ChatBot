@@ -1,13 +1,15 @@
 import Dice from './Dice';
-import Lurk from './Lurk';
+import Discord from './Discord';
+import Followage from './Followage';
 import Hug from './Hug';
-import Followage from './Followage'
+import Lurk from './Lurk';
 
 let Commands = {
     "!dice": Dice,
+    "!discord": Discord,
     "!followage": Followage,
+    "!hug": Hug,
     "!lurk": Lurk,
-    "!hug": Hug
 }
 
 export default Commands
